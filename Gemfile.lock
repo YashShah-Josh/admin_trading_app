@@ -315,6 +315,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  i18n (~> 1.14, >= 1.14.7)
   importmap-rails
   jbuilder
   puma (>= 5.0)

@@ -55,3 +55,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem 'i18n', '~> 1.14', '>= 1.14.7'
