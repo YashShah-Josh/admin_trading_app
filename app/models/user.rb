@@ -1,25 +1,18 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-  has_secure_password
+  # Devise Authentication
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
 
-  has_many :orders, dependent: :nullify
-  has_many :transactions, dependent: :nullify
+  # Associations
+  has_many :orders
+  has_many :transactions
 
-  validates :name, presence: true, length: { minimum: 2 }
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :phone, presence: true, uniqueness: true, length: { is: 10 }, numericality: { only_integer: true }
-  validates :password, presence: true, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
+  # Validations
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true
+  validates :pan, presence: true, uniqueness: true, length: { is: 10 }, format: { with: /\A[A-Z]{5}[0-9]{4}[A-Z]{1}\z/, message: "must be a valid PAN format" }
+  validates :phone, presence: true, length: { is: 10 }, numericality: { only_integer: true }
+  validates :balance, numericality: { greater_than_or_equal_to: 0 }
 
+  # Soft Delete Scope
   scope :active, -> { where(deleted_at: nil) }
-
-  def soft_delete
-    update(deleted_at: Time.current)
-  end
-
-  def active?
-    deleted_at.nil?
-  end
 end
