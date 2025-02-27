@@ -57,3 +57,4 @@ group :test do
 end
 
 gem "devise"
+gem "letter_opener", "~> 1.10"

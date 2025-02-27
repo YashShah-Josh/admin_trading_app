@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_27_051500) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_27_053438) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -24,6 +24,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_051500) do
     t.string "unconfirmed_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", default: "Admin", null: false
+    t.index ["confirmation_token"], name: "index_admins_on_confirmation_token", unique: true
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
@@ -31,10 +33,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_051500) do
   create_table "orders", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "stock_id", null: false
-    t.string "order_type"
-    t.decimal "price"
+    t.string "order_type", default: "buy", null: false
+    t.decimal "price", precision: 15, scale: 2
     t.integer "quantity"
-    t.string "status"
+    t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["stock_id"], name: "index_orders_on_stock_id"
@@ -44,9 +46,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_051500) do
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
     t.string "company_name"
-    t.decimal "current_price"
-    t.decimal "price_change"
-    t.boolean "is_active"
+    t.decimal "current_price", precision: 15, scale: 2, default: "0.0"
+    t.decimal "price_change", precision: 15, scale: 2, default: "0.0"
+    t.boolean "is_active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -54,10 +56,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_051500) do
   create_table "transactions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "stock_id", null: false
-    t.string "transaction_type"
-    t.decimal "price"
+    t.string "transaction_type", default: "buy", null: false
+    t.decimal "price", precision: 15, scale: 2
     t.integer "quantity"
-    t.decimal "total_amount"
+    t.decimal "total_amount", precision: 15, scale: 2
     t.datetime "executed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,6 +73,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_051500) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest", default: "", null: false
   end
 
   add_foreign_key "orders", "stocks"
