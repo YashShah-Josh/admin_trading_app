@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  symbol: MyString
+  company_name: MyString
+  current_price: 9.99
+  price_change: 9.99
+  is_active: false
+
+two:
+  symbol: MyString
+  company_name: MyString
+  current_price: 9.99
+  price_change: 9.99
+  is_active: false
