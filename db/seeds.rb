@@ -34,7 +34,7 @@ stocks = [
   { symbol: "RELIANCE", company_name: "Reliance Industries", current_price: 2500.00, price_change: 5.00 },
   { symbol: "TCS", company_name: "Tata Consultancy Services", current_price: 3500.50, price_change: -10.00 },
   { symbol: "INFY", company_name: "Infosys", current_price: 1500.75, price_change: 3.50 },
-  { symbol: "HDFCBANK", company_name: "HDFC Bank", current_price: 1700.25, price_change: 2.25 },
+  { symbol: "HDFCBANK", company_name: "HDFC Bank", current_price: 1700.25, price_change: 2.25 }
 ]
 
 stocks.each do |stock_data|
