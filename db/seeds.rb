@@ -8,6 +8,7 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 # Seeding Admin
+puts "Seeding started..."
 Admin.find_or_create_by!(email: "admin@example.com") do |admin|
   admin.name = "Super Admin"
   admin.password = "Admin@123"
