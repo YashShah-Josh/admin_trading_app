@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'stocks#index'
+
   devise_for :users
   devise_for :admins
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -11,6 +13,9 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resources :stocks, only: [:index, :show]
+  resources :orders, only: [:index, :new, :create, :destroy]
+  resources :transactions, only: [:index, :show]
+  resources :users, only: [:show]
+  resources :user_stocks
 end

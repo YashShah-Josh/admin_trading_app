@@ -1,0 +1,18 @@
+# app/views/orders/index.html.erb
+<h1>Your Orders</h1>
+<%= link_to 'Place New Order', new_order_path, class: 'btn btn-success mb-3' %>
+<table class="table table-bordered">
+  <tr class="table-dark">
+    <th>Stock</th><th>Type</th><th>Quantity</th><th>Price</th><th>Status</th><th>Actions</th>
+  </tr>
+  <% @orders.each do |order| %>
+    <tr>
+      <td><%= order.stock.symbol %></td>
+      <td><%= order.order_type.capitalize %></td>
+      <td><%= order.quantity %></td>
+      <td>$<%= order.price %></td>
+      <td><%= order.status.capitalize %></td>
+      <td><%= link_to 'Cancel', order_path(order), method: :delete, class: 'btn btn-danger' %></td>
+    </tr>
+  <% end %>
+</table>

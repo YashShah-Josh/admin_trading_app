@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_27_111321) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_02_102753) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -30,11 +30,36 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_111321) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
+  create_table "deprecated_users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "password_digest"
+    t.datetime "deleted_at"
+    t.string "pan"
+    t.text "address"
+    t.float "balance", default: 0.0
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_deprecated_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_deprecated_users_on_email", unique: true
+    t.index ["pan"], name: "index_deprecated_users_on_pan", unique: true
+    t.index ["reset_password_token"], name: "index_deprecated_users_on_reset_password_token", unique: true
+  end
+
   create_table "orders", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "stock_id", null: false
     t.string "order_type", default: "buy", null: false
-    t.decimal "price", precision: 15, scale: 2
+    t.float "price", default: 0.0
     t.integer "quantity"
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
@@ -46,8 +71,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_111321) do
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
     t.string "company_name"
-    t.decimal "current_price", precision: 15, scale: 2, default: "0.0"
-    t.decimal "price_change", precision: 15, scale: 2, default: "0.0"
+    t.float "current_price", default: 0.0
+    t.float "price_change", default: 0.0
     t.boolean "is_active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -55,7 +80,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_111321) do
 
   create_table "transactions", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "stock_id", null: false
     t.string "transaction_type", default: "buy", null: false
     t.decimal "price", precision: 15, scale: 2
     t.integer "quantity"
@@ -63,21 +87,25 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_111321) do
     t.datetime "executed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["stock_id"], name: "index_transactions_on_stock_id"
+    t.integer "order_id"
+    t.index ["order_id"], name: "index_transactions_on_order_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "phone"
+  create_table "user_stocks", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "stock_id", null: false
+    t.integer "quantity", default: 0, null: false
+    t.float "purchased_price", default: 0.0
+    t.float "current_price", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "password_digest"
-    t.datetime "deleted_at"
-    t.string "pan"
-    t.text "address"
-    t.decimal "balance", precision: 15, scale: 2
+    t.index ["stock_id"], name: "index_user_stocks_on_stock_id"
+    t.index ["user_id"], name: "index_user_stocks_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -86,18 +114,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_111321) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["pan"], name: "index_users_on_pan", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "orders", "deprecated_users", column: "user_id"
+  add_foreign_key "orders", "deprecated_users", column: "user_id"
   add_foreign_key "orders", "stocks"
   add_foreign_key "orders", "stocks"
-  add_foreign_key "orders", "users"
-  add_foreign_key "orders", "users"
-  add_foreign_key "transactions", "stocks"
-  add_foreign_key "transactions", "stocks"
-  add_foreign_key "transactions", "users"
-  add_foreign_key "transactions", "users"
+  add_foreign_key "transactions", "deprecated_users", column: "user_id"
+  add_foreign_key "transactions", "deprecated_users", column: "user_id"
+  add_foreign_key "transactions", "orders"
+  add_foreign_key "user_stocks", "deprecated_users", column: "user_id"
+  add_foreign_key "user_stocks", "stocks"
 end

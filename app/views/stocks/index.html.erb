@@ -1,0 +1,17 @@
+<h1 class="text-center">Stock Market</h1>
+<table class="table table-striped table-hover">
+  <tr class="table-dark">
+    <th>Symbol</th><th>Company</th><th>Price</th><th>Change</th><th>Actions</th>
+  </tr>
+  <% @stocks.each do |stock| %>
+    <tr>
+      <td><%= stock.symbol %></td>
+      <td><%= stock.company_name %></td>
+      <td>$<%= stock.current_price %></td>
+      <td class="<%= stock.price_change.positive? ? 'text-success' : 'text-danger' %>">
+        <%= stock.price_change %>
+      </td>
+      <td><%= link_to 'View', stock_path(stock), class: 'btn btn-primary' %></td>
+    </tr>
+  <% end %>
+</table>
