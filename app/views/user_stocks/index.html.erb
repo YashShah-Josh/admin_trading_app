@@ -1,0 +1,17 @@
+<h1 class="text-center">My Stocks</h1>
+<table class="table table-striped table-hover">
+  <tr class="table-dark">
+    <th class="w-25">Stock</th>
+		<th class="w-25">Quantity</th>
+		<th class="w-25">Purchased Price</th>
+		<th class="w-25">Current Price</th>
+  </tr>
+  <% @user_stocks.each do |us| %>
+    <tr>
+      <td><%= us.stock.symbol %></td>
+      <td><%= us.quantity %></td>
+      <td>$ <%= us.purchased_price %></td>
+			<td>$ <%= us.current_price %></td>
+    </tr>
+  <% end %>
+</table>

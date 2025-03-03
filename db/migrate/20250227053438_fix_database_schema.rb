@@ -2,7 +2,7 @@ class FixDatabaseSchema < ActiveRecord::Migration[7.2]
   def change
     # Fix Admins Table
     add_column :admins, :name, :string, null: false, default: "Admin"
-    add_index :admins, :confirmation_token, unique: true
+    # add_index :admins, :confirmation_token, unique: true
 
     # Fix Stocks Table
     change_column :stocks, :current_price, :decimal, precision: 15, scale: 2, default: 0.0
